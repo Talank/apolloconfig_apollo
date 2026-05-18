@@ -18,7 +18,7 @@ name: portal-login-e2e
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths:
       - 'apollo-portal/**'
       - 'apollo-assembly/**'
@@ -26,6 +26,8 @@ on:
       - 'e2e/scripts/**'
       - '.github/workflows/portal-login-e2e.yml'
 
+  push:
+  workflow_dispatch:
 jobs:
   portal-login-e2e:
     name: portal-login-e2e (${{ matrix.mode }})
@@ -34,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [ ldap, oidc ]
+        mode: [ldap, oidc]
     steps:
       - uses: actions/checkout@v4
 

@@ -18,7 +18,7 @@ name: portal-ui-e2e
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths:
       - 'apollo-portal/**'
       - 'apollo-assembly/**'
@@ -27,6 +27,8 @@ on:
       - 'scripts/sql/**'
       - '.github/workflows/portal-ui-e2e.yml'
 
+  push:
+  workflow_dispatch:
 jobs:
   portal-ui-e2e:
     name: portal-ui-e2e

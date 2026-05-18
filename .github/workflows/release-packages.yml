@@ -27,6 +27,7 @@ on:
         required: false
         default: 'false'
 
+  push:
 permissions:
   contents: write
 
