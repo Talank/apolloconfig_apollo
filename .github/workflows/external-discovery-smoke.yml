@@ -18,7 +18,7 @@ name: external-discovery-smoke
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths:
       - 'apollo-configservice/**'
       - 'apollo-adminservice/**'
@@ -41,6 +41,7 @@ on:
           - consul
           - zookeeper
 
+  push:
 jobs:
   resolve-provider-matrix:
     runs-on: ubuntu-latest
@@ -58,7 +59,7 @@ jobs:
           fi
 
   build-services:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs: resolve-provider-matrix
     timeout-minutes: 60
     steps:
@@ -110,6 +111,13 @@ jobs:
           path: /tmp/apollo-discovery-artifact
           if-no-files-found: error
 
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      fail-fast: false
   external-discovery-smoke:
     name: external-discovery-smoke (${{ matrix.provider }})
     runs-on: ubuntu-latest
@@ -142,7 +150,8 @@ jobs:
       - name: Start Apollo config service
         env:
           SPRING_PROFILES_ACTIVE: github,${{ matrix.provider }}-discovery
-          SPRING_DATASOURCE_URL: jdbc:h2:mem:apollo-configservice-db;mode=mysql;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;BUILTIN_ALIAS_OVERRIDE=TRUE;DATABASE_TO_UPPER=FALSE
+          SPRING_DATASOURCE_URL: 
+            jdbc:h2:mem:apollo-configservice-db;mode=mysql;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;BUILTIN_ALIAS_OVERRIDE=TRUE;DATABASE_TO_UPPER=FALSE
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: ""
         run: |
@@ -152,7 +161,8 @@ jobs:
       - name: Start Apollo admin service
         env:
           SPRING_PROFILES_ACTIVE: github,${{ matrix.provider }}-discovery
-          SPRING_DATASOURCE_URL: jdbc:h2:mem:apollo-adminservice-db;mode=mysql;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;BUILTIN_ALIAS_OVERRIDE=TRUE;DATABASE_TO_UPPER=FALSE
+          SPRING_DATASOURCE_URL: 
+            jdbc:h2:mem:apollo-adminservice-db;mode=mysql;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;BUILTIN_ALIAS_OVERRIDE=TRUE;DATABASE_TO_UPPER=FALSE
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: ""
         run: |

@@ -27,12 +27,13 @@ on:
         required: false
         default: 'false'
 
+  push:
 permissions:
   contents: write
 
 jobs:
   package:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 90
     steps:
       - name: Checkout
@@ -118,3 +119,10 @@ jobs:
             "apollo-portal/target/apollo-portal-${VERSION}-github.zip.sha1" \
             --repo apolloconfig/apollo \
             --clobber
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      fail-fast: false
