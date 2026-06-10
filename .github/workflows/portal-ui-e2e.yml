@@ -17,20 +17,11 @@
 name: portal-ui-e2e
 
 on:
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'apollo-portal/**'
-      - 'apollo-assembly/**'
-      - 'e2e/portal-e2e/**'
-      - 'e2e/scripts/**'
-      - 'scripts/sql/**'
-      - '.github/workflows/portal-ui-e2e.yml'
-
+  workflow_dispatch:
 jobs:
   portal-ui-e2e:
     name: portal-ui-e2e
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +90,7 @@ jobs:
           npm run test:e2e:ci
 
       - name: Upload e2e test artifacts on failure
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: portal-ui-e2e-artifacts
@@ -114,3 +105,10 @@ jobs:
           if [ -f /tmp/apollo-assembly.pid ]; then
             kill "$(cat /tmp/apollo-assembly.pid)" || true
           fi
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      fail-fast: false
