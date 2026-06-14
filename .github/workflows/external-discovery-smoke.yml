@@ -35,7 +35,7 @@ jobs:
           fi
 
   build-services:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: resolve-provider-matrix
     timeout-minutes: 60
     steps:
@@ -87,13 +87,6 @@ jobs:
           path: /tmp/apollo-discovery-artifact
           if-no-files-found: error
 
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-      fail-fast: false
   external-discovery-smoke:
     name: external-discovery-smoke (${{ matrix.provider }})
     runs-on: ubuntu-latest
