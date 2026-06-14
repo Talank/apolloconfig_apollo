@@ -49,14 +49,18 @@ jobs:
       - name: JDK 17
         if: always()
         uses: nick-fields/retry@v3
+        env:
+          MAVEN_OPTS: -Dmaven.gitcommitid.skip=true
         with:
           timeout_minutes: 5
           max_attempts: 3
           retry_wait_seconds: 1
-          command: mvn -B clean package jacoco:report -Dmaven.gitcommitid.skip=true
+          command: mvn -B clean package jacoco:report
       - name: JDK 21
         if: always()
-        run: mvn -B clean compile -Dmaven.gitcommitid.skip=true
+        env:
+          MAVEN_OPTS: -Dmaven.gitcommitid.skip=true
+        run: mvn -B clean compile
       - name: Upload coverage to Codecov
         if: always()
         uses: codecov/codecov-action@v1
