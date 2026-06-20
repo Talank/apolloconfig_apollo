@@ -47,9 +47,10 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Build Apollo assembly
-        run: ./mvnw -B -pl apollo-assembly -am -DskipTests package
+        run: mvn -B -pl apollo-assembly -am -DskipTests package
 
       - name: Start Apollo assembly
+        shell: bash
         run: |
           JAR=""
           for candidate in apollo-assembly/target/apollo-assembly-*.jar; do
@@ -74,12 +75,14 @@ jobs:
           echo $! > /tmp/apollo-assembly.pid
 
       - name: Wait for Apollo readiness
+        shell: bash
         env:
           PORTAL_USERNAME: apollo
           PORTAL_PASSWORD: admin
         run: ./e2e/portal-e2e/scripts/wait-for-ready.sh
 
       - name: Run Playwright UI tests
+        shell: bash
         env:
           BASE_URL: http://127.0.0.1:8070
           PLAYWRIGHT_WORKERS: 2
@@ -101,6 +104,7 @@ jobs:
 
       - name: Stop Apollo assembly
         if: always()
+        shell: bash
         run: |
           if [ -f /tmp/apollo-assembly.pid ]; then
             kill "$(cat /tmp/apollo-assembly.pid)" || true
