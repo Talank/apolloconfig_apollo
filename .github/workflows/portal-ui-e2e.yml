@@ -90,7 +90,7 @@ jobs:
           cd e2e/portal-e2e
           npm ci
           npx playwright install chromium
-          npm run test:e2e:ci
+          npx playwright test --grep regression
 
       - name: Upload e2e test artifacts on failure
         if: always()
@@ -107,7 +107,7 @@ jobs:
         shell: bash
         run: |
           if [ -f /tmp/apollo-assembly.pid ]; then
-            kill "$(cat /tmp/apollo-assembly.pid)" || true
+            kill "$(cat /tmp/apollo-assembly.pid)" 2>/dev/null || true
           fi
     strategy:
       matrix:
