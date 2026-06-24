@@ -52,8 +52,9 @@ jobs:
         run: ./mvnw -B -Pnacos-discovery -pl apollo-configservice,apollo-adminservice -am -DskipTests package
 
       - name: Prepare runnable service artifacts
+        shell: bash
         run: |
-          mkdir -p /tmp/apollo-discovery-artifact
+          mkdir -p "${RUNNER_TEMP}/apollo-discovery-artifact"
 
           copy_service_jar() {
             local service="$1"
@@ -74,7 +75,7 @@ jobs:
               exit 1
             fi
 
-            cp "$source_jar" "/tmp/apollo-discovery-artifact/${service}.jar"
+            cp "$source_jar" "${RUNNER_TEMP}/apollo-discovery-artifact/${service}.jar"
           }
 
           copy_service_jar "apollo-configservice"
@@ -84,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apollo-discovery-jars
-          path: /tmp/apollo-discovery-artifact
+          path: ${{ runner.temp }}/apollo-discovery-artifact
           if-no-files-found: error
 
     strategy:
