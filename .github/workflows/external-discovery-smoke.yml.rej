@@ -1,0 +1,14 @@
+@@ -94,12 +94,4 @@
+         with:
+           name: apollo-discovery-jars
+           path: /tmp/apollo-discovery-artifact
+           if-no-files-found: error
+-
+-    strategy:
+-      matrix:
+-        os:
+-          - ubuntu-latest
+-          - windows-latest
+-          - macos-latest
+-      fail-fast: false
+\ No newline at end of line
