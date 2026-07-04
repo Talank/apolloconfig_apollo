@@ -18,16 +18,10 @@
 name: OpenAPI compatibility
 
 on:
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'apollo-portal/pom.xml'
-      - 'scripts/openapi/**'
-      - '.github/workflows/openapi-compatibility.yml'
-
+  workflow_dispatch:
 jobs:
   openapi-compatibility:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
     steps:
@@ -64,3 +58,9 @@ jobs:
           echo "Base spec: $BASE_SPEC"
           echo "Head spec: $HEAD_SPEC"
           python3 scripts/openapi/check_openapi_compatibility.py --base "$BASE_SPEC" --head "$HEAD_SPEC"
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+      fail-fast: false
